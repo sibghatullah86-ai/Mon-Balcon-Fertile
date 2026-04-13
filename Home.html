@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="fr" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Balcon Fertile</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&amp;family=Source+Sans+3:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+html, body { height: 100%; margin: 0; }
+* { box-sizing: border-box; }
+body { font-family: 'Source Sans 3', sans-serif; }
+h1, h2, h3, .display-font { font-family: 'Playfair Display', Georgia, serif; }
+
+.app-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #faf8f4;
+  scroll-behavior: smooth;
+}
+
+.hero-section {
+  background: linear-gradient(165deg, #4A7C59 0%, #3a6347 40%, #2d4f38 100%);
+  position: relative;
+  overflow: hidden;
+}
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.nav-pill { transition: all .25s ease; }
+.nav-pill:hover, .nav-pill.active { background: rgba(255,255,255,.18); }
+
+.card-plant {
+  transition: transform .3s ease, box-shadow .3s ease;
+  cursor: pointer;
+}
+.card-plant:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,.1); }
+
+.month-btn { transition: all .2s ease; }
+.month-btn.active-month { background: #4A7C59; color: #fff; transform: scale(1.05); }
+
+.tab-btn { transition: all .2s ease; border-bottom: 3px solid transparent; }
+.tab-btn.active-tab { border-bottom-color: #4A7C59; color: #4A7C59; font-weight: 600; }
+
+.fade-in { animation: fadeIn .5s ease forwards; opacity: 0; }
+@keyframes fadeIn { to { opacity: 1; } }
+
+.stagger-1 { animation-delay: .05s; }
+.stagger-2 { animation-delay: .1s; }
+.stagger-3 { animation-delay: .15s; }
+.stagger-4 { animation-delay: .2s; }
+
+.section-divider {
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #E8D5B7, #8B7355, #E8D5B7, transparent);
+  border-radius: 2px;
+}
+
+.tuto-step {
+  counter-increment: step;
+  position: relative;
+  padding-left: 3.5rem;
+}
+.tuto-step::before {
+  content: counter(step);
+  position: absolute;
+  left: 0; top: 0;
+  width: 2.5rem; height: 2.5rem;
+  background: #4A7C59;
+  color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  font-size: .95rem;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f0ece4; }
+::-webkit-scrollbar-thumb { background: #c4b99a; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #8B7355; }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper" id="appWrapper"><!-- HERO -->
+   <header class="hero-section" role="banner">
+    <div class="relative z-10 max-w-5xl mx-auto px-5 py-14 md:py-20 text-center">
+     <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 text-sm text-white/80 font-medium"><span>🌿</span> <span>Jardinage urbain &amp; permaculture</span>
+     </div>
+     <h1 id="heroTitle" class="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-4 drop-shadow-lg">Mon Balcon Fertile</h1>
+     <p id="heroSubtitle" class="text-lg md:text-xl text-white/85 font-light max-w-2xl mx-auto mb-3">Guide complet du jardinage urbain pour débutants en France</p>
+     <p id="heroIntro" class="text-sm md:text-base text-white/65 max-w-xl mx-auto mb-8">Cultivez votre petit coin de nature, même sur 2m². Conseils pratiques, calendrier de semis et tutoriels zéro déchet.</p>
+     <nav aria-label="Navigation principale" class="flex flex-wrap justify-center gap-2"><a href="#plantes" class="nav-pill inline-flex items-center gap-1.5 bg-white/10 text-white rounded-full px-4 py-2 text-sm font-medium"><i data-lucide="leaf" style="width:15px;height:15px"></i> 20 Plantes</a> <a href="#calendrier" class="nav-pill inline-flex items-center gap-1.5 bg-white/10 text-white rounded-full px-4 py-2 text-sm font-medium"><i data-lucide="calendar" style="width:15px;height:15px"></i> Calendrier</a> <a href="#tutoriels" class="nav-pill inline-flex items-center gap-1.5 bg-white/10 text-white rounded-full px-4 py-2 text-sm font-medium"><i data-lucide="hammer" style="width:15px;height:15px"></i> Tutoriels DIY</a> <a href="#astuces" class="nav-pill inline-flex items-center gap-1.5 bg-white/10 text-white rounded-full px-4 py-2 text-sm font-medium"><i data-lucide="lightbulb" style="width:15px;height:15px"></i> Astuces</a>
+     </nav>
+    </div>
+   </header><!-- SECTION 1: 20 PLANTES -->
+   <section id="plantes" class="max-w-5xl mx-auto px-5 py-14">
+    <div class="text-center mb-10"><span class="inline-block text-xs font-bold uppercase tracking-widest text-[#8B7355] mb-2">Section 1</span>
+     <h2 class="text-3xl md:text-4xl font-bold text-[#2d4f38] mb-3">20 plantes faciles pour votre balcon</h2>
+     <p class="text-[#6b6152] max-w-xl mx-auto">Sélectionnées pour leur résistance, leur faible besoin d'espace et leur rendement. Parfaites pour les débutants !</p>
+    </div><!-- Filters -->
+    <div class="flex flex-wrap justify-center gap-2 mb-8" role="tablist" aria-label="Filtrer les plantes"><button onclick="filterPlants('all')" class="tab-btn active-tab px-4 py-2 text-sm font-medium text-[#6b6152] rounded-t" role="tab">Toutes</button> <button onclick="filterPlants('aromate')" class="tab-btn px-4 py-2 text-sm font-medium text-[#6b6152] rounded-t" role="tab">🌿 Aromates</button> <button onclick="filterPlants('legume')" class="tab-btn px-4 py-2 text-sm font-medium text-[#6b6152] rounded-t" role="tab">🥬 Légumes</button> <button onclick="filterPlants('fruit')" class="tab-btn px-4 py-2 text-sm font-medium text-[#6b6152] rounded-t" role="tab">🍓 Fruits</button> <button onclick="filterPlants('fleur')" class="tab-btn px-4 py-2 text-sm font-medium text-[#6b6152] rounded-t" role="tab">🌸 Fleurs</button>
+    </div>
+    <div id="plantsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><!-- Generated by JS -->
+    </div>
+   </section>
+   <div class="section-divider max-w-xs mx-auto my-2"></div><!-- SECTION 2: CALENDRIER -->
+   <section id="calendrier" class="max-w-5xl mx-auto px-5 py-14">
+    <div class="text-center mb-10"><span class="inline-block text-xs font-bold uppercase tracking-widest text-[#8B7355] mb-2">Section 2</span>
+     <h2 class="text-3xl md:text-4xl font-bold text-[#2d4f38] mb-3">Calendrier de semis par zone</h2>
+     <p class="text-[#6b6152] max-w-xl mx-auto">Adaptez vos plantations selon votre zone climatique. Cliquez sur un mois pour voir les actions à réaliser.</p>
+    </div><!-- Zone selector -->
+    <div class="flex flex-wrap justify-center gap-3 mb-6"><button onclick="setZone('nord')" class="zone-btn px-4 py-2 rounded-lg text-sm font-semibold bg-[#4A7C59] text-white">🌧️ Nord (Paris, Lille)</button> <button onclick="setZone('centre')" class="zone-btn px-4 py-2 rounded-lg text-sm font-semibold bg-[#E8D5B7] text-[#5a4a35]">☁️ Centre (Lyon, Nantes)</button> <button onclick="setZone('sud')" class="zone-btn px-4 py-2 rounded-lg text-sm font-semibold bg-[#E8D5B7] text-[#5a4a35]">☀️ Sud (Marseille, Nice)</button>
+    </div><!-- Months -->
+    <div class="flex flex-wrap justify-center gap-2 mb-8"><button onclick="setMonth(0)" class="month-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Jan</button> <button onclick="setMonth(1)" class="month-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Fév</button> <button onclick="setMonth(2)" class="month-btn active-month px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Mar</button> <button onclick="setMonth(3)" class="month-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Avr</button> <button onclick="setMonth(4)" class="month-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Mai</button> <button onclick="setMonth(5)" class="month-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Jun</button> <button onclick="setMonth(6)" class="month-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Jul</button> <button onclick="setMonth(7)" class="month-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Aoû</button> <button onclick="setMonth(8)" class="month-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Sep</button> <button onclick="setMonth(9)" class="month-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Oct</button> <button onclick="setMonth(10)" class="month-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Nov</button> <button onclick="setMonth(11)" class="month-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-white text-[#6b6152] shadow-sm">Déc</button>
+    </div>
+    <div id="calendarContent" class="bg-white rounded-2xl shadow-md p-6 md:p-8"><!-- Generated by JS -->
+    </div>
+   </section>
+   <div class="section-divider max-w-xs mx-auto my-2"></div><!-- SECTION 3: TUTORIELS DIY -->
+   <section id="tutoriels" class="max-w-5xl mx-auto px-5 py-14">
+    <div class="text-center mb-10"><span class="inline-block text-xs font-bold uppercase tracking-widest text-[#8B7355] mb-2">Section 3</span>
+     <h2 class="text-3xl md:text-4xl font-bold text-[#2d4f38] mb-3">Jardins verticaux DIY</h2>
+     <p class="text-[#6b6152] max-w-xl mx-auto">3 tutoriels avec des matériaux recyclés. Zéro déchet, petit budget !</p>
+    </div>
+    <div id="tutorialsContainer" class="space-y-6"><!-- Generated by JS -->
+    </div>
+   </section>
+   <div class="section-divider max-w-xs mx-auto my-2"></div><!-- SECTION 4: ASTUCES -->
+   <section id="astuces" class="max-w-5xl mx-auto px-5 py-14">
+    <div class="text-center mb-10"><span class="inline-block text-xs font-bold uppercase tracking-widest text-[#8B7355] mb-2">Section 4</span>
+     <h2 class="text-3xl md:text-4xl font-bold text-[#2d4f38] mb-3">Astuces gain de place</h2>
+     <p class="text-[#6b6152] max-w-xl mx-auto">Optimisez chaque centimètre de votre balcon ou appartement de moins de 50m².</p>
+    </div>
+    <div id="tipsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"><!-- Generated by JS -->
+    </div>
+   </section><!-- FOOTER -->
+   <footer class="bg-[#2d4f38] text-white/70 text-center py-8 px-5">
+    <p class="text-lg font-semibold text-white mb-1 display-font">Mon Balcon Fertile 🌱</p>
+    <p class="text-sm">45 Avenue des Ternes, 75017 Paris</p>
+    <p class="text-xs mt-3 text-white/40">Jardinage urbain · Permaculture · Zéro déchet</p>
+   </footer>
+  </div>
+  <script>
+// ===== DATA =====
+const plants = [
+  {cat:'aromate',emoji:'🌿',nom:'Basilic',diff:'⭐',soleil:'☀️ Plein',eau:'💧💧',pot:'15cm',semis:'Avr-Jun',recolte:'Jun-Oct',cout:'2-3€',astuce:'Pincez les fleurs pour prolonger la récolte.'},
+  {cat:'aromate',emoji:'🌿',nom:'Menthe',diff:'⭐',soleil:'⛅ Mi-ombre',eau:'💧💧💧',pot:'20cm',semis:'Mar-Mai',recolte:'Mai-Oct',cout:'3€',astuce:'Isolez-la dans un pot, elle est envahissante !'},
+  {cat:'aromate',emoji:'🌿',nom:'Ciboulette',diff:'⭐',soleil:'☀️ Plein',eau:'💧💧',pot:'15cm',semis:'Mar-Avr',recolte:'Avr-Nov',cout:'2€',astuce:'Vivace, elle repousse chaque année.'},
+  {cat:'aromate',emoji:'🌿',nom:'Persil',diff:'⭐',soleil:'⛅ Mi-ombre',eau:'💧💧',pot:'15cm',semis:'Mar-Jun',recolte:'Jun-Nov',cout:'1,50€',astuce:'Trempez les graines 24h avant le semis.'},
+  {cat:'aromate',emoji:'🌿',nom:'Thym',diff:'⭐',soleil:'☀️ Plein',eau:'💧',pot:'15cm',semis:'Avr-Mai',recolte:'Toute l\'année',cout:'3€',astuce:'Supporte très bien la sécheresse.'},
+  {cat:'aromate',emoji:'🌿',nom:'Romarin',diff:'⭐',soleil:'☀️ Plein',eau:'💧',pot:'20cm',semis:'Bouture',recolte:'Toute l\'année',cout:'4€',astuce:'Préférez le bouturage, plus rapide que le semis.'},
+  {cat:'legume',emoji:'🥬',nom:'Laitue',diff:'⭐',soleil:'⛅ Mi-ombre',eau:'💧💧💧',pot:'20cm',semis:'Mar-Sep',recolte:'Mai-Nov',cout:'1,50€',astuce:'Semez toutes les 2 semaines pour récolter en continu.'},
+  {cat:'legume',emoji:'🥬',nom:'Radis',diff:'⭐',soleil:'☀️ Plein',eau:'💧💧',pot:'15cm',semis:'Mar-Sep',recolte:'Avr-Oct',cout:'1€',astuce:'Prêts en 3-4 semaines, parfaits pour débuter !'},
+  {cat:'legume',emoji:'🫑',nom:'Piment',diff:'⭐⭐',soleil:'☀️ Plein',eau:'💧💧',pot:'20cm',semis:'Fév-Mar',recolte:'Jul-Oct',cout:'3€',astuce:'Démarrez à l\'intérieur puis sortez en mai.'},
+  {cat:'legume',emoji:'🍅',nom:'Tomate cerise',diff:'⭐⭐',soleil:'☀️ Plein',eau:'💧💧💧',pot:'30cm',semis:'Fév-Avr',recolte:'Jul-Oct',cout:'3-5€',astuce:'Choisissez des variétés naines pour le balcon.'},
+  {cat:'legume',emoji:'🥒',nom:'Concombre',diff:'⭐⭐',soleil:'☀️ Plein',eau:'💧💧💧',pot:'30cm',semis:'Avr-Mai',recolte:'Jul-Sep',cout:'2€',astuce:'Palissez-le verticalement pour gagner de la place.'},
+  {cat:'legume',emoji:'🫘',nom:'Haricot nain',diff:'⭐',soleil:'☀️ Plein',eau:'💧💧',pot:'20cm',semis:'Mai-Jul',recolte:'Jul-Oct',cout:'2€',astuce:'Pas besoin de tuteur pour les variétés naines.'},
+  {cat:'legume',emoji:'🥕',nom:'Carotte ronde',diff:'⭐⭐',soleil:'☀️ Plein',eau:'💧💧',pot:'20cm prof.',semis:'Mar-Jul',recolte:'Jun-Nov',cout:'1,50€',astuce:'Variétés rondes adaptées aux pots peu profonds.'},
+  {cat:'legume',emoji:'🧄',nom:'Ail',diff:'⭐',soleil:'☀️ Plein',eau:'💧',pot:'15cm',semis:'Oct-Nov',recolte:'Jun-Jul',cout:'2€',astuce:'Plantez les gousses d\'ail bio du commerce.'},
+  {cat:'legume',emoji:'🥬',nom:'Épinard',diff:'⭐',soleil:'⛅ Mi-ombre',eau:'💧💧',pot:'15cm',semis:'Mar-Mai / Sep',recolte:'Mai-Nov',cout:'1,50€',astuce:'Préfère la fraîcheur, idéal balcon nord.'},
+  {cat:'fruit',emoji:'🍓',nom:'Fraisier',diff:'⭐',soleil:'☀️ Plein',eau:'💧💧💧',pot:'20cm',semis:'Plant',recolte:'Mai-Oct',cout:'5-8€',astuce:'Suspendez-les pour gagner de la place.'},
+  {cat:'fruit',emoji:'🫐',nom:'Myrtillier nain',diff:'⭐⭐',soleil:'⛅ Mi-ombre',eau:'💧💧💧',pot:'30cm',semis:'Plant',recolte:'Jul-Sep',cout:'10-15€',astuce:'Terre de bruyère obligatoire (pH acide).'},
+  {cat:'fruit',emoji:'🍋',nom:'Citronnier nain',diff:'⭐⭐⭐',soleil:'☀️ Plein',eau:'💧💧',pot:'40cm',semis:'Plant',recolte:'Nov-Mar',cout:'20-30€',astuce:'Rentrez-le l\'hiver si T° < 5°C.'},
+  {cat:'fleur',emoji:'🌸',nom:'Capucine',diff:'⭐',soleil:'☀️ Plein',eau:'💧💧',pot:'15cm',semis:'Avr-Mai',recolte:'Jun-Oct',cout:'2€',astuce:'Fleurs et feuilles comestibles ! Repousse les pucerons.'},
+  {cat:'fleur',emoji:'🌻',nom:'Souci',diff:'⭐',soleil:'☀️ Plein',eau:'💧',pot:'15cm',semis:'Mar-Mai',recolte:'Mai-Nov',cout:'1,50€',astuce:'Attire les pollinisateurs et repousse les nuisibles.'},
+];
+
+const calendarData = {
+  nord: [
+    {mois:'Janvier',semer:[],planter:[],entretien:['Planifier le jardin','Commander les graines','Nettoyer les pots'],recolter:[]},
+    {mois:'Février',semer:['Piment (intérieur)','Tomate cerise (intérieur)'],planter:[],entretien:['Préparer le terreau','Vérifier le drainage des pots'],recolter:[]},
+    {mois:'Mars',semer:['Laitue','Radis','Persil','Ciboulette','Épinard','Carotte'],planter:['Menthe','Thym (plants)'],entretien:['Début arrosage régulier'],recolter:[]},
+    {mois:'Avril',semer:['Basilic','Capucine','Souci','Haricot (fin)'],planter:['Fraisier'],entretien:['Installer tuteurs tomates'],recolter:['Radis (semis mars)']},
+    {mois:'Mai',semer:['Concombre','Haricot nain'],planter:['Tomate cerise','Piment (dehors)','Citronnier'],entretien:['Paillage des pots','Attention aux Saints de Glace !'],recolter:['Laitue','Radis','Ciboulette']},
+    {mois:'Juin',semer:['Laitue (succession)'],planter:[],entretien:['Arrosage quotidien si chaleur','Pincer basilic'],recolter:['Fraises','Épinard','Persil','Capucine']},
+    {mois:'Juillet',semer:['Haricot (dernier)'],planter:[],entretien:['Arrosage matin et soir','Récolter régulièrement'],recolter:['Tomate cerise','Concombre','Haricot','Basilic','Myrtille']},
+    {mois:'Août',semer:['Épinard (automne)','Laitue (automne)'],planter:[],entretien:['Tailler les aromates','Récolter les graines'],recolter:['Tomate','Piment','Fraises','Haricot']},
+    {mois:'Septembre',semer:['Laitue d\'hiver','Radis d\'automne'],planter:[],entretien:['Réduire arrosage','Dernières récoltes d\'été'],recolter:['Tomate','Piment','Carotte','Myrtille']},
+    {mois:'Octobre',semer:[],planter:['Ail'],entretien:['Nettoyer les jardinières','Composter les restes'],recolter:['Laitue','Épinard','Radis','Souci']},
+    {mois:'Novembre',semer:[],planter:['Ail (dernier)'],entretien:['Protéger du gel (voile)','Rentrer citronnier'],recolter:['Thym','Romarin','Persil']},
+    {mois:'Décembre',semer:[],planter:[],entretien:['Repos hivernal','Planifier la saison','Offrir des graines 🎁'],recolter:['Citron (si arbre)']},
+  ],
+  centre: [
+    {mois:'Janvier',semer:['Piment (intérieur)'],planter:[],entretien:['Planifier','Commander graines'],recolter:[]},
+    {mois:'Février',semer:['Tomate cerise (intérieur)','Piment','Laitue (sous abri)'],planter:[],entretien:['Préparer terreau'],recolter:[]},
+    {mois:'Mars',semer:['Radis','Laitue','Persil','Ciboulette','Épinard','Carotte','Souci'],planter:['Menthe','Thym','Romarin'],entretien:['Début arrosages'],recolter:['Ciboulette (vivace)']},
+    {mois:'Avril',semer:['Basilic','Capucine','Haricot (fin)','Concombre (intérieur)'],planter:['Fraisier','Myrtillier'],entretien:['Installer tuteurs'],recolter:['Radis','Laitue']},
+    {mois:'Mai',semer:['Concombre','Haricot nain'],planter:['Tomate cerise','Piment','Citronnier'],entretien:['Paillage','Arrosage régulier'],recolter:['Laitue','Radis','Épinard','Fraises']},
+    {mois:'Juin',semer:['Laitue (succession)','Haricot'],planter:[],entretien:['Arrosage quotidien','Pincer tomates'],recolter:['Fraises','Basilic','Persil','Capucine']},
+    {mois:'Juillet',semer:[],planter:[],entretien:['Arrosage 2x/jour si canicule'],recolter:['Tomate','Concombre','Haricot','Myrtille','Piment']},
+    {mois:'Août',semer:['Épinard','Laitue','Radis (automne)'],planter:[],entretien:['Récolter graines','Tailler aromates'],recolter:['Tomate','Piment','Fraises','Carotte']},
+    {mois:'Septembre',semer:['Laitue d\'hiver'],planter:[],entretien:['Réduire arrosage'],recolter:['Tomate','Haricot','Carotte','Épinard']},
+    {mois:'Octobre',semer:[],planter:['Ail'],entretien:['Nettoyage','Compost'],recolter:['Laitue','Radis','Souci']},
+    {mois:'Novembre',semer:[],planter:['Ail'],entretien:['Voile d\'hivernage','Rentrer citronnier'],recolter:['Thym','Romarin']},
+    {mois:'Décembre',semer:[],planter:[],entretien:['Repos','Planifier 🎄'],recolter:['Citron']},
+  ],
+  sud: [
+    {mois:'Janvier',semer:['Laitue (sous abri)','Piment (intérieur)'],planter:['Ail'],entretien:['Préparer terreau'],recolter:['Thym','Romarin','Citron']},
+    {mois:'Février',semer:['Tomate (intérieur)','Radis','Épinard','Persil','Souci'],planter:['Fraisier'],entretien:['Premier arrosage'],recolter:['Citron']},
+    {mois:'Mars',semer:['Basilic','Laitue','Carotte','Haricot (fin)','Capucine','Concombre'],planter:['Menthe','Thym','Romarin','Myrtillier'],entretien:['Tuteurs'],recolter:['Radis','Épinard']},
+    {mois:'Avril',semer:['Haricot','Concombre'],planter:['Tomate','Piment','Citronnier'],entretien:['Paillage essentiel'],recolter:['Laitue','Radis','Fraises','Ciboulette']},
+    {mois:'Mai',semer:['Laitue (ombre)'],planter:[],entretien:['Arrosage quotidien','Ombrer si canicule'],recolter:['Fraises','Basilic','Persil','Capucine','Fèves']},
+    {mois:'Juin',semer:[],planter:[],entretien:['Arrosage 2x/jour','Paillage épais'],recolter:['Tomate','Concombre','Haricot','Fraises','Myrtille']},
+    {mois:'Juillet',semer:['Haricot (dernier)'],planter:[],entretien:['Gestion canicule','Ombrage'],recolter:['Tomate','Piment','Concombre','Myrtille','Basilic']},
+    {mois:'Août',semer:['Épinard','Laitue','Radis'],planter:[],entretien:['Tailler','Récolter graines'],recolter:['Tomate','Piment','Haricot','Carotte']},
+    {mois:'Septembre',semer:['Laitue','Épinard','Radis'],planter:['Fraisier (2e saison)'],entretien:['Reprendre arrosage normal'],recolter:['Tomate','Piment','Fraises (remontantes)']},
+    {mois:'Octobre',semer:['Fèves'],planter:['Ail'],entretien:['Compost','Nettoyage'],recolter:['Laitue','Radis','Épinard','Souci']},
+    {mois:'Novembre',semer:['Fèves','Laitue d\'hiver'],planter:['Ail'],entretien:['Peu d\'entretien'],recolter:['Citron','Thym','Romarin']},
+    {mois:'Décembre',semer:[],planter:[],entretien:['Planifier','Protéger si gel ponctuel'],recolter:['Citron','Romarin','Thym']},
+  ]
+};
+
+const tutorials = [
+  {
+    titre:'🪟 Jardin vertical en palette',
+    cout:'0-10€',
+    temps:'2-3h',
+    materiel:['1 palette européenne récupérée','Toile géotextile ou sac de jute','Agrafeuse murale','Terreau universel','6-8 plants d\'aromates'],
+    etapes:[
+      'Poncez légèrement la palette et vérifiez qu\'elle porte le logo HT (traitement thermique, non chimique).',
+      'Agrafez la toile géotextile à l\'arrière et sur les côtés pour créer des poches de terre.',
+      'Fixez la palette debout contre un mur solide avec des équerres. Assurez-vous qu\'elle est bien stable.',
+      'Remplissez les étages de terreau en tassant bien. Humidifiez avant de planter.',
+      'Plantez vos aromates : thym et romarin en haut (plus sec), menthe et persil en bas (plus humide).',
+      'Arrosez doucement par le haut. L\'eau s\'écoule naturellement vers les étages inférieurs.'
+    ],
+    conseil:'Récupérez les palettes dans les zones commerciales. Évitez celles marquées MB (bromure de méthyle).'
+  },
+  {
+    titre:'🫙 Tour à fraises en seaux recyclés',
+    cout:'5-15€',
+    temps:'1-2h',
+    materiel:['3-4 seaux de 10L (récupération)','Perceuse ou clou chauffé','Tige filetée ou tuteur bambou (1m)','Terreau + compost','8-12 plants de fraisier'],
+    etapes:[
+      'Percez 4-6 trous de 5cm sur les côtés de chaque seau (c\'est par là que sortiront les fraisiers).',
+      'Percez un trou central au fond de chaque seau pour le passage du tuteur.',
+      'Empilez les seaux en les décalant légèrement et enfilez le tuteur central pour stabiliser.',
+      'Remplissez de terreau mélangé à du compost (2/3 - 1/3). Tassez à chaque niveau.',
+      'Insérez un plant de fraisier dans chaque trou latéral, racines vers l\'intérieur.',
+      'Arrosez par le dessus. Placez au soleil et récoltez dès juin !'
+    ],
+    conseil:'Les seaux de peinture vides (nettoyés) sont parfaits. Demandez aux voisins ou sur les groupes locaux.'
+  },
+  {
+    titre:'🧴 Mur végétal en bouteilles PET',
+    cout:'0-5€',
+    temps:'1h30',
+    materiel:['10-15 bouteilles PET de 1,5L','Ficelle solide ou fil de fer','Cutter','Clous ou crochets muraux','Terreau','Petits plants ou semis'],
+    etapes:[
+      'Découpez un rectangle de 10×5cm sur le côté de chaque bouteille (ce sera l\'ouverture de plantation).',
+      'Percez 2 trous au fond et 2 au goulot de chaque bouteille pour passer la ficelle.',
+      'Percez aussi 2-3 petits trous de drainage au fond de chaque bouteille.',
+      'Enfilez les bouteilles sur des ficelles verticales (3-4 bouteilles par rang, espacées de 20cm).',
+      'Fixez les ficelles au mur ou à une rambarde avec des crochets. Vérifiez la solidité.',
+      'Remplissez de terreau, plantez laitue, basilic ou fraises. Arrosez par le haut.'
+    ],
+    conseil:'Utilisez les bouchons percés pour réguler l\'écoulement entre les étages. Effet cascade garanti !'
+  }
+];
+
+const tips = [
+  {icon:'layers',titre:'Empilez en hauteur',desc:'Utilisez des étagères, des échelles recyclées ou des suspensions. 1m² au sol = 3m² de culture en vertical. <strong>Coût : 0-20€</strong> avec de la récup\'.', couleur:'#4A7C59'},
+  {icon:'calendar',titre:'Succession de cultures',desc:'Ne laissez jamais un pot vide. Quand les radis sont récoltés (30j), semez de la laitue. Un pot peut produire <strong>3-4 récoltes/an</strong>.', couleur:'#8B7355'},
+  {icon:'droplets',titre:'Arrosage malin',desc:'Bouteilles retournées en goutte-à-goutte (0€) ou oyas en terre cuite (<strong>5-10€</strong>). Économisez 50% d\'eau et partez en week-end tranquille.', couleur:'#4A7C59'},
+  {icon:'sun',titre:'Mappez votre lumière',desc:'Observez votre balcon pendant 1 journée. <strong>6h+ de soleil</strong> = tomates, basilic. <strong>3-4h</strong> = laitue, menthe, épinard. <strong>2h</strong> = persil, ciboulette.', couleur:'#8B7355'},
+  {icon:'recycle',titre:'Compost de balcon',desc:'Un lombricomposteur (25×40cm) transforme vos épluchures en or noir. <strong>Coût : 30-60€</strong> ou DIY avec 2 seaux percés (5€).', couleur:'#4A7C59'},
+  {icon:'move',titre:'Pots à roulettes',desc:'Montez vos gros pots sur des plateaux à roulettes (<strong>3-8€</strong>). Suivez le soleil en les déplaçant et protégez-les du vent facilement.', couleur:'#8B7355'},
+  {icon:'users',titre:'Association de plantes',desc:'Tomate + basilic = saveur + protection anti-pucerons. Fraise + ail = moins de maladies. <strong>0€ de pesticide !</strong>', couleur:'#4A7C59'},
+  {icon:'package',titre:'Contenants récup\'',desc:'Cagettes, boîtes de conserve, sacs de courses solides, vieilles chaussures… Tout fait un pot ! Percez le fond pour le drainage. <strong>Coût : 0€</strong>.', couleur:'#8B7355'},
+];
+
+// ===== STATE =====
+let currentZone = 'nord';
+let currentMonth = 2;
+let currentFilter = 'all';
+let expandedTutorial = 0;
+
+// ===== RENDER FUNCTIONS =====
+function renderPlants() {
+  const grid = document.getElementById('plantsGrid');
+  const filtered = currentFilter === 'all' ? plants : plants.filter(p => p.cat === currentFilter);
+  grid.innerHTML = filtered.map((p, i) => `
+    <div class="card-plant bg-white rounded-xl p-4 shadow-sm border border-[#e8e2d6] fade-in stagger-${(i%4)+1}" onclick="togglePlantDetail(this)">
+      <div class="flex items-start justify-between mb-2">
+        <span class="text-2xl">${p.emoji}</span>
+        <span class="text-xs font-medium text-[#8B7355] bg-[#f5efe5] px-2 py-0.5 rounded-full">${p.cout}</span>
+      </div>
+      <h3 class="font-bold text-[#2d4f38] text-base mb-1 display-font">${p.nom}</h3>
+      <div class="text-xs text-[#8B7355] space-y-0.5">
+        <p>Difficulté : ${p.diff}</p>
+        <p>${p.soleil} · ${p.eau}</p>
+        <p>Pot : min. ${p.pot}</p>
+      </div>
+      <div class="plant-detail hidden mt-3 pt-3 border-t border-[#e8e2d6] text-xs text-[#6b6152] space-y-1">
+        <p><strong>Semis :</strong> ${p.semis}</p>
+        <p><strong>Récolte :</strong> ${p.recolte}</p>
+        <p class="italic text-[#4A7C59]">💡 ${p.astuce}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function togglePlantDetail(card) {
+  const detail = card.querySelector('.plant-detail');
+  detail.classList.toggle('hidden');
+}
+
+function filterPlants(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
+  event.target.classList.add('active-tab');
+  renderPlants();
+}
+
+function setZone(z) {
+  currentZone = z;
+  document.querySelectorAll('.zone-btn').forEach(b => {
+    b.classList.remove('bg-[#4A7C59]','text-white');
+    b.classList.add('bg-[#E8D5B7]','text-[#5a4a35]');
+  });
+  event.target.classList.remove('bg-[#E8D5B7]','text-[#5a4a35]');
+  event.target.classList.add('bg-[#4A7C59]','text-white');
+  renderCalendar();
+}
+
+function setMonth(m) {
+  currentMonth = m;
+  document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active-month'));
+  event.target.classList.add('active-month');
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const data = calendarData[currentZone][currentMonth];
+  const box = document.getElementById('calendarContent');
+  const section = (icon, title, items, color) => items.length ? `
+    <div class="mb-4">
+      <h4 class="flex items-center gap-2 font-semibold text-sm mb-2" style="color:${color}"><i data-lucide="${icon}" style="width:16px;height:16px"></i> ${title}</h4>
+      <div class="flex flex-wrap gap-2">${items.map(i => `<span class="inline-block bg-[#f5efe5] text-[#5a4a35] text-xs font-medium px-3 py-1 rounded-full">${i}</span>`).join('')}</div>
+    </div>` : '';
+
+  box.innerHTML = `
+    <h3 class="text-xl font-bold text-[#2d4f38] mb-4 display-font">${data.mois} — Zone ${currentZone.charAt(0).toUpperCase()+currentZone.slice(1)}</h3>
+    ${section('sprout','À semer',data.semer,'#4A7C59')}
+    ${section('shovel','À planter',data.planter,'#8B7355')}
+    ${section('wrench','Entretien',data.entretien,'#6b6152')}
+    ${section('apple','À récolter',data.recolter,'#c0553a')}
+    ${!data.semer.length && !data.planter.length && !data.recolter.length ? '<p class="text-[#8B7355] text-sm italic">Mois calme. Profitez-en pour planifier la saison à venir ! 📝</p>' : ''}
+  `;
+  lucide.createIcons();
+}
+
+function renderTutorials() {
+  const c = document.getElementById('tutorialsContainer');
+  c.innerHTML = tutorials.map((t, i) => `
+    <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-[#e8e2d6]">
+      <button onclick="toggleTutorial(${i})" class="w-full flex items-center justify-between p-5 text-left">
+        <div>
+          <h3 class="text-lg font-bold text-[#2d4f38] display-font">${t.titre}</h3>
+          <div class="flex gap-3 mt-1 text-xs text-[#8B7355]">
+            <span>💰 ${t.cout}</span><span>⏱ ${t.temps}</span>
+          </div>
+        </div>
+        <i data-lucide="${expandedTutorial===i?'chevron-up':'chevron-down'}" style="width:20px;height:20px;color:#8B7355"></i>
+      </button>
+      <div class="tuto-body ${expandedTutorial===i?'':'hidden'} px-5 pb-6">
+        <div class="mb-4">
+          <h4 class="text-sm font-semibold text-[#8B7355] mb-2">Matériel nécessaire :</h4>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-sm text-[#6b6152]">
+            ${t.materiel.map(m => `<li class="flex items-start gap-1.5"><span class="text-[#4A7C59] mt-0.5">✓</span>${m}</li>`).join('')}
+          </ul>
+        </div>
+        <div style="counter-reset:step" class="space-y-4">
+          ${t.etapes.map(e => `<div class="tuto-step"><p class="text-sm text-[#6b6152] leading-relaxed">${e}</p></div>`).join('')}
+        </div>
+        <div class="mt-4 bg-[#f5efe5] rounded-lg p-3 text-sm text-[#8B7355]">
+          <strong>💡 Conseil :</strong> ${t.conseil}
+        </div>
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons();
+}
+
+function toggleTutorial(i) {
+  expandedTutorial = expandedTutorial === i ? -1 : i;
+  renderTutorials();
+}
+
+function renderTips() {
+  const g = document.getElementById('tipsGrid');
+  g.innerHTML = tips.map((t, i) => `
+    <div class="bg-white rounded-xl p-5 shadow-sm border border-[#e8e2d6] fade-in stagger-${(i%4)+1}">
+      <div class="flex items-start gap-3">
+        <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" style="background:${t.couleur}15">
+          <i data-lucide="${t.icon}" style="width:20px;height:20px;color:${t.couleur}"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-[#2d4f38] text-sm mb-1">${t.titre}</h3>
+          <p class="text-xs text-[#6b6152] leading-relaxed">${t.desc}</p>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons();
+}
+
+// ===== INIT =====
+const defaultConfig = {
+  page_title: 'Mon Balcon Fertile',
+  page_subtitle: 'Guide complet du jardinage urbain pour débutants en France',
+  intro_text: 'Cultivez votre petit coin de nature, même sur 2m². Conseils pratiques, calendrier de semis et tutoriels zéro déchet.',
+  background_color: '#faf8f4',
+  surface_color: '#ffffff',
+  text_color: '#2d4f38',
+  accent_color: '#4A7C59',
+  secondary_color: '#8B7355',
+  font_family: 'Playfair Display',
+  font_size: 16
+};
+
+function applyConfig(config) {
+  document.getElementById('heroTitle').textContent = config.page_title || defaultConfig.page_title;
+  document.getElementById('heroSubtitle').textContent = config.page_subtitle || defaultConfig.page_subtitle;
+  document.getElementById('heroIntro').textContent = config.intro_text || defaultConfig.intro_text;
+
+  const bg = config.background_color || defaultConfig.background_color;
+  const accent = config.accent_color || defaultConfig.accent_color;
+  const secondary = config.secondary_color || defaultConfig.secondary_color;
+  const textC = config.text_color || defaultConfig.text_color;
+  const surface = config.surface_color || defaultConfig.surface_color;
+  const font = config.font_family || defaultConfig.font_family;
+  const size = config.font_size || defaultConfig.font_size;
+
+  document.getElementById('appWrapper').style.background = bg;
+  document.querySelectorAll('.display-font, h1, h2, h3').forEach(el => {
+    el.style.fontFamily = `${font}, Georgia, serif`;
+    el.style.color = textC;
+  });
+  document.querySelectorAll('.card-plant, #calendarContent, .tuto-body').forEach(el => {
+    el.style.backgroundColor = surface;
+  });
+  document.querySelectorAll('body, p, span, li, div').forEach(el => {
+    el.style.fontSize = '';
+  });
+  document.body.style.fontSize = size + 'px';
+
+  document.querySelector('.hero-section').style.background = `linear-gradient(165deg, ${accent} 0%, ${textC} 100%)`;
+}
+
+if (window.elementSdk) {
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (config) => { applyConfig(config); },
+    mapToCapabilities: (config) => ({
+      recolorables: [
+        { get: () => config.background_color || defaultConfig.background_color, set: v => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); }},
+        { get: () => config.surface_color || defaultConfig.surface_color, set: v => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); }},
+        { get: () => config.text_color || defaultConfig.text_color, set: v => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); }},
+        { get: () => config.accent_color || defaultConfig.accent_color, set: v => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }},
+        { get: () => config.secondary_color || defaultConfig.secondary_color, set: v => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); }},
+      ],
+      borderables: [],
+      fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: v => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }},
+      fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: v => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }},
+    }),
+    mapToEditPanelValues: (config) => new Map([
+      ['page_title', config.page_title || defaultConfig.page_title],
+      ['page_subtitle', config.page_subtitle || defaultConfig.page_subtitle],
+      ['intro_text', config.intro_text || defaultConfig.intro_text],
+    ])
+  });
+}
+
+renderPlants();
+renderCalendar();
+renderTutorials();
+renderTips();
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ebe0332e7d54b55',t:'MTc3NjEyMDQ0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
